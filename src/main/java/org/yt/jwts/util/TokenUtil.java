@@ -40,7 +40,7 @@ public class TokenUtil {
         token.setTokenKey(Hex.encodeToString(key.getEncoded()));
         token.setAccessToken(access_token);
         token.setUserId(subject);
-        token.setExpireTime(expireDate);
+        token.setExpireTime(expireDate.getTime());
         return token;
     }
 
@@ -56,7 +56,7 @@ public class TokenUtil {
         Token token = new Token();
         token.setTokenKey(Hex.encodeToString(key.getEncoded()));
         token.setAccessToken(access_token);
-        token.setExpireTime(expireDate);
+        token.setExpireTime(expireDate.getTime());
         return token;
     }
 

@@ -22,9 +22,9 @@ public class Token implements Serializable {
 
     private String refreshToken;  // 暂时没用
 
-    private Date expireTime;  // 过期时间
+    private Long expireTime;  // 过期时间
 
-    private Date createTime;
+    private Long createTime;
 
-    private Date updateTime;
+    private Long updateTime;
 }

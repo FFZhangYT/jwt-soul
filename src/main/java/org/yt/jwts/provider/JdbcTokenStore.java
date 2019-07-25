@@ -203,9 +203,9 @@ public class JdbcTokenStore implements TokenStore {
             token.setUserId(user_id);
             token.setTokenKey(token_key);
             token.setRefreshToken(refresh_token);
-            token.setExpireTime(expire_time);
-            token.setCreateTime(create_time);
-            token.setUpdateTime(update_time);
+            token.setExpireTime(expire_time.getTime());
+            token.setCreateTime(create_time.getTime());
+            token.setUpdateTime(update_time.getTime());
             if (permissions != null) {
                 try {
                     token.setPermissions(listToArray(JSON.parseArray(permissions,String.class)));

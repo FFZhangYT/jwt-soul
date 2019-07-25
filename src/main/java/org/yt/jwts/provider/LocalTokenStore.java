@@ -40,7 +40,7 @@ public class LocalTokenStore {
         return token;
     }
 
-    public <T> T parseToken(String accessToken,Class<T> clazz) throws IOException {
+    public <T> T parseToken(String accessToken,Class<T> clazz){
         String clazzJson = TokenUtil.parseToken(accessToken, getTokenKey());
         return JSON.parseObject(clazzJson,clazz);
     }

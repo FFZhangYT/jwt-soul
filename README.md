@@ -2,10 +2,10 @@
 
 [![](https://jitpack.io/v/FFZhangYT/Jwt-soul.svg)](https://jitpack.io/#FFZhangYT/Jwt-soul)
 
-### 简介
-    jwt-soul封装了jjwt
+### Introduction
+    Jwt-soul encapsulates jjwt
 
-### 依赖方式
+### Dependent mode
 
     <dependency>
         <groupId>com.github.FFZhangYT</groupId>
@@ -20,23 +20,23 @@
         </repository>
 	</repositories>
 
-### 在SpringMVC中使用
+### Use in SpringMVC
 
 ```xml
 <beans>
-    <!-- 拦截器配置 -->
+    <!-- Interceptor configuration -->
     <mvc:interceptors>
         <mvc:interceptor>
             <mvc:mapping path="/api/**" />
             <mvc:exclude-mapping path="/api/login" />
             <bean class="org.yt.jwts.TokenInterceptor">
                 <property name="tokenStore" ref="tokenStore" />
-                <property name="maxToken" value="3" /> <!-- 单个用户最大token数 -->
+                <property name="maxToken" value="3" /> <!-- Maximum number of token per user -->
             </bean>
         </mvc:interceptor>
     </mvc:interceptors>
     
-    <!-- 这里可以选择 JdbcTokenStore 和 RedisTokenStore -->
+    <!-- Here you can choose JdbcTokenStore and RedisTokenStore -->
     <bean id="tokenStore" class="org.yt.jwts.provider.JdbcTokenStore">
         <constructor-arg name="dataSource" ref="dataSource" />
     </bean>
@@ -50,7 +50,7 @@
 <br>
 
 
-### 登录签发token
+### Log in to issue token
 
 ```java
 @RestController
@@ -60,64 +60,64 @@ public class LoginController {
     
     @PostMapping("/login")
     public ResultMap login(String account, String password, HttpServletRequest request) {
-        // 你的验证逻辑
+        // Your verification logic.
         // ......
-        // 签发token
+        // Issue token
         Token token = tokenStore.createNewToken(userId, permissions, roles);
-        return ResultMap.ok("登录成功").put("access_token",token.getAccessToken());
+        return ResultMap.ok("login success").put("access_token",token.getAccessToken());
     }
 }
 ```
 
-token默认过期时间是一天，设置过期时间方法（单位秒）：
+The default expiration time for token is one day, setting the expiration time method in seconds:
 
-```java
-Token token = tokenStore.createNewToken(userId, permissions, roles, 60*60*24*30);
-```
+
+    Token token = tokenStore.createNewToken(userId, permissions, roles, 60*60*24*30);
+
 
 <br>
 
-### 使用注解或代码限制权限
-1.使用注解的方式：
+### Use comments or code to restrict permissions
+1.Using comments:
 ```text
-// 需要有system权限才能访问
+// System permissions are required to access
 @RequiresPermissions("system")
 
-// 需要有system和front权限才能访问,logical可以不写,默认是AND
+// System and front permissions are required to access, logical can not write, the default is AND
 @RequiresPermissions(value={"system","front"}, logical=Logical.AND)
 
-// 需要有system或者front权限才能访问
+// System or front permissions are required to access
 @RequiresPermissions(value={"system","front"}, logical=Logical.OR)
 
-// 需要有admin或者user角色才能访问
+// You need a admin or user role to access
 @RequiresRoles(value={"admin","user"}, logical=Logical.OR)
 ```
-> 注解只能加在Controller的方法上面。
+> Comments can only be added to Controller's methods.
 
 <br>
 
-2.使用代码的方式：
+2.The way you use code:
 ```text
-//是否有system权限
+//Do you have system permissions
 SubjectUtil.hasPermission(request, "system");
 
-//是否有system或者front权限
+//Do you have system or front permissions.
 SubjectUtil.hasPermission(request, new String[]{"system","front"}, Logical.OR);
 
-//是否有admin或者user角色
+//Is there a admin or user role.
 SubjectUtil.hasRole(request, new String[]{"admin","user"}, Logical.OR)
 ```
 
 <br>
 
-### 前端传递token
-放在参数里面用`access_token`传递：
+### Front-end delivery token
+Put it in the parameter and pass it with 'access_ token':
 ```javascript
 $.get("/xxx", { access_token: token }, function(data) {
 
 });
 ```
-放在header里面用`Authorization`、`Bearer`传递： 
+Put it in header and pass it with 'Authorization', 'Bearer': 
 ```javascript
 $.ajax({
     url: "/xxx", 
@@ -130,17 +130,17 @@ $.ajax({
 
 <br>
 
-## 注意事项
-### 异常处理
-&emsp;JwtPermistion在token验证失败和没有权限的时候抛出异常，框架定义了几个异常：
+## Matters needing attention
+### Exception handling
+&emsp;Jwt-soul throws exceptions when token authentication fails and does not have permissions, and the framework defines several exceptions：
     
-| 异常                  | 描述          | 错误信息                          |
-|:----------------------|:-------------|:----------------------------------|
-| ErrorTokenException   | token验证失败 | 错误信息“身份验证失败”，错误码401 |
-| ExpiredTokenException | token已经过期 | 错误信息“登录已过期”，错误码402   |
-| UnauthorizedException | 没有权限      | 错误信息“没有访问权限”，错误码403 |
+| Exception             | Description             | Description error message                             |
+|:----------------------|:------------------------|:------------------------------------------------------|
+| ErrorTokenException   | Token validation failed | Error message "Authentication failed", error code 401 |
+| ExpiredTokenException | Token has expired       | Error message "login expired", error code 402         |
+| UnauthorizedException | No permissions          | Error message "No access", error code 403             |
 
-&emsp;建议使用异常处理器来捕获异常并返回json数据给前台：
+&emsp;It is recommended that you use an exception processor to catch an exception and return json data to the foreground：
 
 ```xml
 <bean id="exceptionHandler" class="com.xxx.ExceptionHandler" />
@@ -175,17 +175,17 @@ public class ExceptionHandler implements HandlerExceptionResolver {
 
 <br>
 
-### 主动让token失效：
+### Take the initiative to invalidate token：
 ```java
 public class XX {
     @Autowired
     private TokenStore tokenStore;
     
     public void xx(){
-        // 移除用户的某个token
+        // Remove a user's token
         tokenStore.removeToken(userId, access_token);
         
-        // 移除用户的全部token
+        // Remove all token of the user
         tokenStore.removeTokensByUserId(userId);
     }
 }
@@ -193,18 +193,18 @@ public class XX {
 
 <br>
 
-### 更新角色和权限列表
-&emsp;修改了用户的角色和权限需要同步更新框架中的角色和权限：
+### Update the list of roles and permissions
+&emsp;Modified roles and permissions for users need to update roles and permissions in the framework synchronously:
 ```java
 public class XX {
     @Autowired
     private TokenStore tokenStore;
     
     public void xx(){
-        // 更新用户的角色列表
+        // Update the user's list of roles
         tokenStore.updateRolesByUserId(userId, roles);
         
-        // 更新用户的权限列表
+        // Update the user's permission list
         tokenStore.updatePermissionsByUserId(userId, permissions);
     }
 }
@@ -212,16 +212,16 @@ public class XX {
 
 <br>
 
-### 获取当前的用户信息
+### Gets the current user information
 ```text
 Token token = SubjectUtil.getToken(request);
 ```   
 
 <br>
 
-### RedisTokenStore需要集成redis
+### RedisTokenStore needs to integrate redis
 
-1.SpringMvc集成Redis：
+1.SpringMvc integrated Redis:
 ```xml
 <beans>
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
@@ -246,7 +246,7 @@ Token token = SubjectUtil.getToken(request);
 
 <br>
 
-### JdbcTokenStore需要导入SQL
-&emsp;使用JdbcTokenStore需要导入SQL，需要配置dataSource。
+### JdbcTokenStore needs to import SQL
+&emsp;Using JdbcTokenStore requires importing SQL, to configure dataSource.
 
 <br>

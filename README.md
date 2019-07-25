@@ -175,31 +175,6 @@ public class ExceptionHandler implements HandlerExceptionResolver {
 
 <br>
 
-### SpringBoot中异常处理
-```java
-@ControllerAdvice
-public class ExceptionHandler {
-
-    @ResponseBody
-    @ExceptionHandler(Exception.class)
-    public Map<String, Object> errorHandler(Exception ex) {
-        Map<String, Object> map = new HashMap<>();
-        // 根据不同错误获取错误信息
-        if (ex instanceof TokenException) {
-            map.put("code", ((TokenException) ex).getCode());
-            map.put("msg", ex.getMessage());
-        } else {
-            map.put("code", 500);
-            map.put("msg", ex.getMessage());
-            ex.printStackTrace();
-        }
-        return map;
-    }
-}
-```
-
-<br>
-
 ### 主动让token失效：
 ```java
 public class XX {

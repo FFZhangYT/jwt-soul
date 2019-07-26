@@ -29,7 +29,7 @@
         <mvc:interceptor>
             <mvc:mapping path="/api/**" />
             <mvc:exclude-mapping path="/api/login" />
-            <bean class="org.yt.jwts.TokenInterceptor">
+            <bean class="com.github.zkoalas.jwts.TokenInterceptor">
                 <property name="tokenStore" ref="tokenStore" />
                 <property name="maxToken" value="3" /> <!-- Maximum number of token per user -->
             </bean>
@@ -37,11 +37,11 @@
     </mvc:interceptors>
     
     <!-- Here you can choose JdbcTokenStore and RedisTokenStore -->
-    <bean id="tokenStore" class="org.yt.jwts.provider.JdbcTokenStore">
+    <bean id="tokenStore" class="com.github.zkoalas.jwts.provider.JdbcTokenStore">
         <constructor-arg name="dataSource" ref="dataSource" />
     </bean>
     
-    <bean id="tokenStore" class="org.yt.jwts.provider.RedisTokenStore">
+    <bean id="tokenStore" class="com.github.zkoalas.jwts.provider.RedisTokenStore">
         <constructor-arg name="redisTemplate" ref="stringRedisTemplate" />
     </bean>
 </beans>

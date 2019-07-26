@@ -1,11 +1,11 @@
-package org.yt.jwts.provider;
+package com.github.zkoalas.jwts.provider;
 
 
 import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.security.Keys;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.yt.jwts.util.TokenUtil;
+import com.github.zkoalas.jwts.util.TokenUtil;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;

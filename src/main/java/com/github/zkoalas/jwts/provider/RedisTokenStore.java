@@ -1,10 +1,8 @@
-package org.yt.jwts.provider;
+package com.github.zkoalas.jwts.provider;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.yt.jwts.util.TokenUtil;
+import com.github.zkoalas.jwts.util.TokenUtil;
 
 import java.util.ArrayList;
 import java.util.List;

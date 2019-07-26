@@ -1,4 +1,4 @@
-package org.yt.jwts.provider;
+package com.github.zkoalas.jwts.provider;
 
 import java.util.List;
 

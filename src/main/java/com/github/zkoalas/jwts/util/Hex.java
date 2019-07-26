@@ -1,4 +1,4 @@
-package org.yt.jwts.util;
+package com.github.zkoalas.jwts.util;
 
 import java.io.UnsupportedEncodingException;
 

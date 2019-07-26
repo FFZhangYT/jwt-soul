@@ -1,11 +1,11 @@
-package org.yt.jwts.util;
+package com.github.zkoalas.jwts.util;
 
+import com.github.zkoalas.jwts.provider.Token;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.yt.jwts.provider.Token;
 
 import javax.crypto.SecretKey;
 import java.security.Key;

@@ -1,7 +1,7 @@
-package org.yt.jwts.util;
+package com.github.zkoalas.jwts.util;
 
-import org.yt.jwts.annotation.Logical;
-import org.yt.jwts.provider.Token;
+import com.github.zkoalas.jwts.annotation.Logical;
+import com.github.zkoalas.jwts.provider.Token;
 
 import javax.servlet.http.HttpServletRequest;
 

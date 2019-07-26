@@ -1,22 +1,23 @@
-package org.yt.jwts;
+package com.github.zkoalas.jwts;
 
+import com.github.zkoalas.jwts.annotation.Logical;
+import com.github.zkoalas.jwts.annotation.RequiresPermissions;
+import com.github.zkoalas.jwts.annotation.RequiresRoles;
+import com.github.zkoalas.jwts.exception.ErrorTokenException;
+import com.github.zkoalas.jwts.exception.ExpiredTokenException;
+import com.github.zkoalas.jwts.exception.UnauthorizedException;
+import com.github.zkoalas.jwts.provider.Config;
+import com.github.zkoalas.jwts.provider.LocalTokenStore;
+import com.github.zkoalas.jwts.provider.Token;
+import com.github.zkoalas.jwts.provider.TokenStore;
+import com.github.zkoalas.jwts.util.SubjectUtil;
+import com.github.zkoalas.jwts.util.TokenUtil;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
-import org.yt.jwts.annotation.Logical;
-import org.yt.jwts.annotation.RequiresPermissions;
-import org.yt.jwts.annotation.RequiresRoles;
-import org.yt.jwts.exception.ErrorTokenException;
-import org.yt.jwts.exception.ExpiredTokenException;
-import org.yt.jwts.exception.UnauthorizedException;
-import org.yt.jwts.provider.Config;
-import org.yt.jwts.provider.LocalTokenStore;
-import org.yt.jwts.provider.Token;
-import org.yt.jwts.provider.TokenStore;
-import org.yt.jwts.util.SubjectUtil;
-import org.yt.jwts.util.TokenUtil;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;

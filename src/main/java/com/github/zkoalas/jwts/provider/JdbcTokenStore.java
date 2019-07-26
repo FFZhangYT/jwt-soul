@@ -1,15 +1,12 @@
-package org.yt.jwts.provider;
+package com.github.zkoalas.jwts.provider;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONReader;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.util.Assert;
-import org.yt.jwts.util.TokenUtil;
+import com.github.zkoalas.jwts.util.TokenUtil;
 
 import javax.sql.DataSource;
 import java.sql.ResultSet;

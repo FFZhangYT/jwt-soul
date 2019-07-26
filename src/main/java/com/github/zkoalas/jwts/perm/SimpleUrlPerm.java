@@ -1,4 +1,4 @@
-package org.yt.jwts.perm;
+package com.github.zkoalas.jwts.perm;
 
 import org.springframework.web.method.HandlerMethod;
 

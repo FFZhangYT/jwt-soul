@@ -1,4 +1,4 @@
-package org.yt.jwts.provider;
+package com.github.zkoalas.jwts.provider;
 
 import lombok.Data;
 

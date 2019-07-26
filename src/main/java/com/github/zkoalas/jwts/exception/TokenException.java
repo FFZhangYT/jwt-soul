@@ -1,4 +1,4 @@
-package org.yt.jwts.exception;
+package com.github.zkoalas.jwts.exception;
 
 /**
  * TokenException

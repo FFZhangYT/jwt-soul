@@ -16,6 +16,7 @@
         <license>
             <name>The Apache License, Version 2.0</name>
             <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
         </license>
     </licenses>
 
@@ -23,8 +24,8 @@
         <developer>
             <name>zhangyeting</name>
             <email>809981203@qq.com</email>
-            <organization>Sonatype</organization>
-            <organizationUrl>http://www.sonatype.com</organizationUrl>
+            <organization>github</organization>
+            <organizationUrl>https://github.com/zkoalas</organizationUrl>
         </developer>
     </developers>
 

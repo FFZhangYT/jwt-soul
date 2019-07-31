@@ -2,6 +2,8 @@ package com.github.zkoalas.jwts.util;
 
 import com.github.zkoalas.jwts.annotation.Logical;
 import com.github.zkoalas.jwts.provider.Token;
+import com.google.common.base.CaseFormat;
+
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,7 +11,8 @@ import javax.servlet.http.HttpServletRequest;
  * 权限检查工具类
  */
 public class SubjectUtil {
-    public static final String REQUEST_TOKEN_NAME = "JWTS_TOKEN";
+    public static final String REQUEST_TOKEN_NAME = "JWT_TOKEN";
+
 
     /**
      * 检查是否有指定角色
@@ -100,5 +103,31 @@ public class SubjectUtil {
             }
         }
         return false;
+    }
+
+
+    public static String getJwtToken(){
+        return lowerUnderscoreToHump(REQUEST_TOKEN_NAME);
+    }
+
+    /**
+     * 下划线转驼峰
+     * 举例: JWT_TOKEN  to jwtToken
+     * @param fieldName
+     * @return
+     */
+    public static String lowerUnderscoreToHump(String fieldName){
+        return CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, fieldName);
+    }
+
+
+    /**
+     * 驼峰线转下划
+     * 举例: jwtToken  to jwt_token
+     * @param fieldName
+     * @return
+     */
+    public static String lowerHumpToUnderscore(String fieldName){
+       return  CaseFormat.LOWER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, fieldName);
     }
 }

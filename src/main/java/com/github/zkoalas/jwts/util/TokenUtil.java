@@ -31,11 +31,7 @@ public class TokenUtil {
 
     public static Token buildToken(String subject, long expire, Key key) {
         Date expireDate = new Date(new Date().getTime() + 1000 * expire);  // 单位毫秒
-        String access_token = Jwts.builder()
-                .setSubject(subject)
-                .signWith(key)
-                .setExpiration(expireDate)
-                .compact();
+        String access_token = toBuildAccessToken(null, subject, expireDate, key);
         Token token = new Token();
         token.setTokenKey(Hex.encodeToString(key.getEncoded()));
         token.setAccessToken(access_token);
@@ -44,15 +40,9 @@ public class TokenUtil {
         return token;
     }
 
-
     public static Token toBuildToken(Map<String, Object> claims, String subject, long expire, Key key) {
         Date expireDate = new Date(new Date().getTime() + 1000 * expire);  // 单位毫秒
-        String access_token = Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .signWith(key)
-                .setExpiration(expireDate)
-                .compact();
+        String access_token = toBuildAccessToken(claims, subject, expireDate, key);
         Token token = new Token();
         token.setTokenKey(Hex.encodeToString(key.getEncoded()));
         token.setAccessToken(access_token);
@@ -60,6 +50,16 @@ public class TokenUtil {
         return token;
     }
 
+
+    public static String toBuildAccessToken(Map<String, Object> claims, String subject, Date expireDate, Key key) {
+        String access_token = Jwts.builder()
+                .setClaims(claims)
+                .setSubject(subject)
+                .signWith(key)
+                .setExpiration(expireDate)
+                .compact();
+        return access_token;
+    }
     /**
      * 解析token
      */

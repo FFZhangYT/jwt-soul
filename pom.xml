@@ -6,7 +6,7 @@
 
     <groupId>com.github.zkoalas</groupId>
     <artifactId>jwt-soul</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.2</version>
     <packaging>jar</packaging>
     <name>jwt-soul</name>
     <description>jwt-soul is a jwt development kit.</description>
@@ -26,6 +26,7 @@
             <email>809981203@qq.com</email>
             <organization>github</organization>
             <organizationUrl>https://github.com/zkoalas</organizationUrl>
+            <timezone>+8</timezone>
         </developer>
     </developers>
 
@@ -111,6 +112,12 @@
             <artifactId>lombok</artifactId>
             <version>1.18.8</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>23.0</version>
         </dependency>
     </dependencies>
     <profiles>
@@ -228,17 +235,28 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.7</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>ossrh</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
                 </plugins>
             </build>
         </profile>
     </profiles>
     <distributionManagement>
         <snapshotRepository>
-            <id>oss</id>
+            <id>ossrh</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
         <repository>
-            <id>oss</id>
+            <id>ossrh</id>
             <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
         </repository>
     </distributionManagement>

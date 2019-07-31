@@ -3,6 +3,7 @@ package com.github.zkoalas.jwts.provider;
 
 import com.alibaba.fastjson.JSON;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import com.github.zkoalas.jwts.util.TokenUtil;
@@ -11,43 +12,43 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class LocalTokenStore {
+@Slf4j
+public class LocalTokenStore implements BaseTokenStore {
 
     private String secretKey;
     private String md5Key;
     private Long expiration;
 
 
-    protected final Log logger = LogFactory.getLog(this.getClass());
     public LocalTokenStore(String secretKey, String md5Key, Long expiration) {
         this.secretKey = secretKey;
         this.md5Key = md5Key;
         this.expiration = expiration;
     }
 
+    @Override
     public String getTokenKey() {
         return TokenUtil.getHexKey(Keys.hmacShaKeyFor(secretKey.getBytes()));
     }
 
-    public Token createNewToken(String subject) {
+
+    @Override
+    public Token findToken(String subject, String access_token) {
+        Token token = JSON.parseObject(subject, Token.class);
+        token.setAccessToken(access_token);
+        return token;
+    }
+
+    public <S extends BaseToken> Token createNewToken(S obj) {
+        String subject = JSON.toJSONString(obj);
         String tokenKey = getTokenKey();
-        logger.debug("-------------------------------------------");
-        logger.debug("构建token使用tokenKey：" + tokenKey);
-        logger.debug("-------------------------------------------");
+        log.debug("-------------------------------------------");
+        log.debug("构建token使用tokenKey：" + tokenKey);
+        log.debug("-------------------------------------------");
         Map<String, Object> claims = new HashMap();
         claims.put(md5Key, getRandomString(6));
         Token token = TokenUtil.toBuildToken(claims,subject, expiration, TokenUtil.parseHexKey(tokenKey));
         return token;
-    }
-
-    public <T> T parseToken(String accessToken,Class<T> clazz){
-        String clazzJson = TokenUtil.parseToken(accessToken, getTokenKey());
-        return JSON.parseObject(clazzJson,clazz);
-    }
-
-
-    public String parseToken(String accessToken){
-        return TokenUtil.parseToken(accessToken, getTokenKey());
     }
 
 

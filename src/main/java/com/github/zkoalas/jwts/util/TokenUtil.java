@@ -1,11 +1,13 @@
 package com.github.zkoalas.jwts.util;
 
 import com.github.zkoalas.jwts.provider.Token;
+import com.google.common.collect.Maps;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.util.ObjectUtils;
 
 import javax.crypto.SecretKey;
 import java.security.Key;
@@ -52,6 +54,9 @@ public class TokenUtil {
 
 
     public static String toBuildAccessToken(Map<String, Object> claims, String subject, Date expireDate, Key key) {
+        if(ObjectUtils.isEmpty(claims)){
+            claims = Maps.newHashMap();
+        }
         String access_token = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)

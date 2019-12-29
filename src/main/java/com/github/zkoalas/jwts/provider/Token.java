@@ -20,6 +20,8 @@ public class Token implements Serializable {
 
     private String[] roles;  // 用户角色
 
+    private String[] roleIds;// 角色id
+
     private String refreshToken;  // 暂时没用
 
     private Long expireTime;  // 过期时间

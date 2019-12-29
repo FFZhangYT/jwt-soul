@@ -7,9 +7,9 @@ import java.util.List;
  */
 public interface TokenStore extends BaseTokenStore{
 
-    Token createNewToken(String userId, String[] permissions, String[] roles);
+    Token createNewToken(String userId, String[] permissions, String[] roles, String[] roleIds);
 
-    Token createNewToken(String userId, String[] permissions, String[] roles, long expire);
+    Token createNewToken(String userId, String[] permissions, String[] roles, String[] roleIds, long expire);
 
     int storeToken(Token token);
 
@@ -20,6 +20,8 @@ public interface TokenStore extends BaseTokenStore{
     int removeTokensByUserId(String userId);
 
     int updateRolesByUserId(String userId, String[] roles);
+
+    int updateRoleIdsByUserId(String userId, String[] roleIds);
 
     int updatePermissionsByUserId(String userId, String[] permissions);
 }

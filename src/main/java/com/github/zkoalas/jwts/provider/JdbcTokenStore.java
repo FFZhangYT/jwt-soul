@@ -23,7 +23,7 @@ public class JdbcTokenStore implements TokenStore {
     private final JdbcTemplate jdbcTemplate;
     private RowMapper<Token> rowMapper = new TokenRowMapper();
 
-    private static final String UPDATE_FIELDS = "access_token, user_id, permissions, roles, refresh_token, expire_time";
+    private static final String UPDATE_FIELDS = "access_token, user_id, permissions, roles, role_ids, refresh_token, expire_time";
 
     private static final String BASE_SELECT = "select token_id, " + UPDATE_FIELDS + ", create_time, update_time from oauth_token";
 
@@ -31,13 +31,15 @@ public class JdbcTokenStore implements TokenStore {
 
     private static final String SQL_SELECT_BY_USER_ID = BASE_SELECT + " where user_id = ? order by create_time";
 
-    private static final String SQL_INSERT = "insert into oauth_token (" + UPDATE_FIELDS + ") values (?,?,?,?,?,?)";
+    private static final String SQL_INSERT = "insert into oauth_token (" + UPDATE_FIELDS + ") values (?,?,?,?,?,?,?)";
 
     private static final String SQL_UPDATE = "update oauth_token set " + UPDATE_FIELDS.replaceAll(", ", "=?, ") + "=? where token_id = ?";
 
     private static final String SQL_UPDATE_PERMS = "update oauth_token set permissions = ? where user_id = ?";
 
     private static final String SQL_UPDATE_ROLES = "update oauth_token set roles = ? where user_id = ?";
+
+    private static final String SQL_UPDATE_ROLE_IDS = "update oauth_token set role_ids = ? where user_id = ?";
 
     private static final String SQL_DELETE = "delete from oauth_token where user_id = ? and access_token = ?";
 
@@ -67,11 +69,11 @@ public class JdbcTokenStore implements TokenStore {
     }
 
 
-    public Token createNewToken(String userId, String[] permissions, String[] roles) {
-        return createNewToken(userId, permissions, roles, TokenUtil.DEFAULT_EXPIRE);
+    public Token createNewToken(String userId, String[] permissions, String[] roles, String[] roleIds) {
+        return createNewToken(userId, permissions, roles, roleIds ,TokenUtil.DEFAULT_EXPIRE);
     }
 
-    public Token createNewToken(String userId, String[] permissions, String[] roles, long expire) {
+    public Token createNewToken(String userId, String[] permissions, String[] roles, String[] roleIds, long expire) {
         String tokenKey = getTokenKey();
         log.debug("-------------------------------------------");
         log.debug("构建token使用tokenKey：" + tokenKey);
@@ -79,6 +81,7 @@ public class JdbcTokenStore implements TokenStore {
         Token token = TokenUtil.buildToken(userId, expire, TokenUtil.parseHexKey(tokenKey));
         token.setPermissions(permissions);
         token.setRoles(roles);
+        token.setRoleIds(roleIds);
         if (storeToken(token) > 0) {
             if (Config.getInstance().getMaxToken() != null && Config.getInstance().getMaxToken() != -1) {
                 List<Token> userTokens = findTokensByUserId(userId);
@@ -133,6 +136,17 @@ public class JdbcTokenStore implements TokenStore {
         return jdbcTemplate.update(SQL_UPDATE_ROLES, objects);
     }
 
+    public int updateRoleIdsByUserId(String userId, String[] roleIds) {
+        Object[] objects = new Object[2];
+        try {
+            objects[0] = JSON.toJSONString(roleIds);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        objects[1] = userId;
+        return jdbcTemplate.update(SQL_UPDATE_ROLE_IDS, objects);
+    }
+
     public int updatePermissionsByUserId(String userId, String[] permissions) {
         Object[] objects = new Object[2];
         try {
@@ -143,6 +157,7 @@ public class JdbcTokenStore implements TokenStore {
         objects[1] = userId;
         return jdbcTemplate.update(SQL_UPDATE_PERMS, objects);
     }
+
 
     private List<Object> getFieldsForUpdate(Token token) {
         List<Object> objects = new ArrayList();
@@ -162,6 +177,13 @@ public class JdbcTokenStore implements TokenStore {
             e.printStackTrace();
         }
         objects.add(roleJson);
+        String roleIdsJson = null;
+        try {
+            roleIdsJson = JSON.toJSONString(token.getRoleIds());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        objects.add(roleIdsJson);
         objects.add(token.getTokenKey());
         objects.add(token.getRefreshToken());
         objects.add(token.getExpireTime());
@@ -189,7 +211,8 @@ public class JdbcTokenStore implements TokenStore {
             String user_id = rs.getString("user_id");
             String permissions = rs.getString("permissions");
             String roles = rs.getString("roles");
-             String token_key = rs.getString("token_key");
+            String roleIds = rs.getString("role_ids");
+            String token_key = rs.getString("token_key");
             String refresh_token = rs.getString("refresh_token");
             Date expire_time = rs.getDate("expire_time");
             Date create_time = rs.getDate("create_time");
@@ -213,6 +236,13 @@ public class JdbcTokenStore implements TokenStore {
             if (roles != null) {
                 try {
                     token.setRoles(listToArray(JSON.parseArray(permissions,String.class)));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if (roles != null) {
+                try {
+                    token.setRoleIds(listToArray(JSON.parseArray(roleIds,String.class)));
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

@@ -43,7 +43,7 @@
         <spring-boot.version>1.5.6.RELEASE</spring-boot.version>
         <spring.version>4.3.13.RELEASE</spring.version>
         <jjwt.version>0.10.5</jjwt.version>
-        <fastjson.version>1.2.58</fastjson.version>
+        <fastjson.version>1.2.83</fastjson.version>
     </properties>
     <dependencies>
         <!-- j2ee环境 -->
